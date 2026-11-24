@@ -1,12 +1,15 @@
 {
   "name": "smart-klima",
-  "version": "1.0.0",
-  "description": "Продаж і монтаж кондиціонерів: веб-сайт і мобільний застосунок на одній базі даних",
+  "version": "2.0.0",
+  "description": "Інформаційна система продажу, монтажу і сервісу кондиціонерів: Web, Mobile (React Native), REST API, SQLite",
   "private": true,
   "license": "MIT",
   "engines": { "node": ">=22.13" },
   "scripts": {
     "start": "node server/server.js",
-    "test": "node --test test/*.test.js"
+    "demo": "node server/demo.js && node server/server.js data/demo.db",
+    "test": "node --test test/api.test.js",
+    "e2e": "node test/e2e.js",
+    "mobile": "cd mobile && npx expo start"
   }
 }

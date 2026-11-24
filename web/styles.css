@@ -359,3 +359,22 @@ footer.site{background:var(--surface);border-top:1px solid var(--line);padding-b
 .order[data-s="onway"]{border-left-color:var(--accent)}
 .st.onway{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent)}
 .myorders div{flex-wrap:wrap}
+
+/* форми входу, запис, аналітика */
+.inp{border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:9px 11px;width:100%}
+.err{color:var(--heat)!important;font-weight:600}
+.st.on_way,.st.in_work{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent)}
+.order[data-s="on_way"],.order[data-s="in_work"]{border-left-color:var(--accent)}
+.chip.slot{font-family:var(--mono)}
+.chip:disabled{opacity:.45;cursor:not-allowed}
+.angrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.bars{display:grid;gap:8px}
+.bar{display:grid;grid-template-columns:minmax(0,9rem) 1fr auto;gap:10px;align-items:center;font-size:.88rem}
+.bar i{display:block;height:10px;border-radius:5px;background:var(--surface-2);overflow:hidden}
+.bar i b{display:block;height:100%;background:var(--accent);border-radius:5px}
+.bar span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar span:last-child{font-family:var(--mono)}
+.timeline{display:flex;gap:4px}
+.timeline i{flex:1;height:5px;border-radius:3px;background:var(--surface-2)}
+.timeline i.on{background:var(--accent)}
+.hist{font-size:.82rem;color:var(--muted);display:grid;gap:2px}

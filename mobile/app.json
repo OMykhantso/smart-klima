@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "Smart Klima",
+    "slug": "smart-klima",
+    "scheme": "smartklima",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "ua.smartklima.app"
+    },
+    "android": {
+      "package": "ua.smartklima.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#0B7A8A",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-secure-store"
+    ],
+    "extra": {
+      "apiUrl": "http://localhost:3000"
+    }
+  }
+}

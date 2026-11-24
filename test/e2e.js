@@ -1,69 +1,91 @@
-// Наскрізна перевірка "одна база для двох систем" у браузері.
-// Потрібен Playwright: npx playwright install chromium && node test/e2e.js
-// Сценарій: клієнт оформлює заявку на сайті → майстер бере її в мобільному
-// застосунку і закриває → адмін на сайті бачить статус і нотатку → клієнт бачить статус.
+// Наскрізний тест інтеграції Web ↔ Mobile через спільний API і базу даних.
+// Запуск: npm run e2e  (потрібен Playwright; мобільний застосунок збирається для веб-перегляду
+// командою `npx expo export --platform web` у папці mobile, API — на порту 3000).
 'use strict';
-const { chromium } = require('playwright');
+const http = require('node:http');
+const fs = require('node:fs');
+const path = require('node:path');
+const { execSync } = require('node:child_process');
 const assert = require('node:assert/strict');
-process.env.ADMIN_KEY = 'e2e-admin';
+const { chromium } = require('playwright');
+process.env.JWT_SECRET = process.env.JWT_SECRET || 'e2e-secret';
 const { start } = require('../server/server.js');
 
+const DIST = path.join(__dirname, '..', 'mobile', 'dist');
+const SHOTS = process.env.E2E_SHOTS || '';
+function serveStatic(dir, port) {
+  const types = { '.html': 'text/html', '.js': 'text/javascript', '.png': 'image/png', '.ico': 'image/x-icon', '.json': 'application/json', '.ttf': 'font/ttf' };
+  return new Promise(r => { const s = http.createServer((req, res) => {
+    let f = path.join(dir, decodeURIComponent(new URL(req.url, 'http://x').pathname));
+    if (!f.startsWith(dir)) { res.writeHead(403); return res.end(); }
+    if (!fs.existsSync(f) || fs.statSync(f).isDirectory()) f = path.join(dir, 'index.html');
+    res.writeHead(200, { 'Content-Type': types[path.extname(f)] || 'application/octet-stream' }); fs.createReadStream(f).pipe(res);
+  }).listen(port, () => r(s)); });
+}
+const step = m => console.log('✔ ' + m);
+
 (async () => {
-  const srv = await start(0, ':memory:'); const base = `http://localhost:${srv.port}`;
+  if (!fs.existsSync(path.join(DIST, 'index.html'))) execSync('npx expo export --platform web --output-dir dist', { cwd: path.join(__dirname, '..', 'mobile'), stdio: 'inherit' });
+  const srv = await start(3000, ':memory:');
+  const mob = await serveStatic(DIST, 8081);
   const browser = await chromium.launch();
   const errors = [];
   const watch = p => { p.on('pageerror', e => errors.push(e.message)); p.on('console', m => m.type() === 'error' && !/fonts\.g/.test(m.text()) && errors.push(m.text())); };
+  const shot = async (p, name, full) => { if (SHOTS) await p.screenshot({ path: path.join(SHOTS, name + '.png'), fullPage: !!full }); };
   try {
-    // 1. Клієнт на сайті
+    /* 1. Клієнт на сайті: реєстрація, вибір моделі, запис на час */
     const web = await browser.newPage({ viewport: { width: 1280, height: 900 } }); watch(web);
-    await web.goto(base + '/web/#catalog');
-    await web.waitForFunction(() => window.SKApi && window.SKApi.mode === 'server');
-    await web.click('#grid .add[data-id="1"]');
-    await web.goto(base + '/web/#order');
-    await web.fill('#oName', 'Клієнт E2E'); await web.fill('#oPhone', '+380671234567'); await web.fill('#oAddr', 'вул. Тестова, 1');
-    await web.click('#oSubmit');
-    await web.waitForSelector('#dOk .ok');
-    const okText = await web.textContent('#dOk .ok');
-    const id = +okText.match(/№(\d+)/)[1];
-    console.log('✔ сайт: створено заявку №' + id);
+    await web.goto('http://localhost:3000/web/#catalog'); await web.waitForSelector('#grid .card');
+    await web.click('#grid .add[data-id="2"]');
+    await web.goto('http://localhost:3000/web/#register');
+    await web.fill('#rName', 'Наталія E2E'); await web.fill('#rEmail', 'e2e@test.ua'); await web.fill('#rPhone', '0961112233'); await web.fill('#rPass', 'Klima2026');
+    await web.click('#regForm button[type=submit]');
+    await web.waitForSelector('#bSlots [data-time="10:00"]'); await web.click('#bSlots [data-time="10:00"]');
+    await web.fill('#oAddr', 'Київ, вул. Хрещатик, 1, кв. 7');
+    await web.click('#oSubmit'); await web.waitForSelector('#dOk .ok');
+    const id = +(await web.textContent('#dOk .ok')).match(/№(\d+)/)[1];
+    const masterName = (await web.textContent('#dOk .ok')).match(/Майстер: ([^.]+)\./)[1];
+    step(`сайт: клієнт зареєструвався і записався, заявка №${id}, майстер ${masterName}`);
 
-    // 2. Майстер у застосунку
-    const mob = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true }); watch(mob);
-    await mob.goto(base + '/mobile/');
-    await mob.click('[data-tab="profile"]'); await mob.click('#toMaster');
-    await mob.click('[data-who="m3"]');
-    for (const k of '3333') await mob.click(`[data-k="${k}"]`);
-    await mob.waitForSelector(`[data-o="${id}"]`);
-    await mob.click(`[data-o="${id}"]`); await mob.click('#take');
-    await mob.click('[data-mt="mine"]');
-    await mob.click(`[data-o="${id}"]`); await mob.click('#nextSt'); // onway
-    await mob.click(`[data-o="${id}"]`); await mob.fill('#note', 'Встановлено, траса 4 м'); await mob.click('#saveNote');
-    await mob.click(`[data-o="${id}"]`); await mob.click('#nextSt'); // done
-    await mob.click('[data-tab="done"]'); await mob.waitForSelector(`[data-o="${id}"]`);
-    console.log('✔ застосунок: майстер взяв і виконав заявку');
+    /* 2. Майстер у мобільному застосунку проводить заявку через усі статуси */
+    const emails = { 'Андрій Коваль': 'andrii', 'Олег Бондар': 'oleh', 'Ірина Мельник': 'iryna', 'Тарас Литвин': 'taras' };
+    const m = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 }); watch(m);
+    await m.goto('http://localhost:8081/'); await m.getByTestId('login-email').waitFor();
+    await m.getByTestId('login-email').fill(emails[masterName] + '@smartklima.ua'); await m.getByTestId('login-password').fill('Master123!'); await m.getByTestId('login-submit').click();
+    await m.getByTestId('order-' + id).waitFor(); await shot(m, 'e2e-mobile-schedule');
+    await m.getByTestId('order-' + id).click(); await m.getByTestId('next-status').waitFor();
+    for (const label of ['Підтверджена', 'Майстер у дорозі', 'Монтаж триває']) { await m.getByTestId('next-status').click(); await m.getByText(label, { exact: true }).first().waitFor(); }
+    await m.getByTestId('master-note').fill('Встановлено на 2-му поверсі, траса 3 м'); await m.getByTestId('save-note').click();
+    await shot(m, 'e2e-mobile-order', true);
+    await m.getByTestId('next-status').click(); await m.getByText('Виконана', { exact: true }).first().waitFor();
+    step('застосунок: майстер підтвердив, виїхав, почав і завершив роботу, залишив нотатку');
 
-    // 3. Адмін на сайті
-    await web.goto(base + '/web/#admin');
-    await web.fill('#admKey', 'e2e-admin'); await web.click('#admLogin button[type=submit]');
-    await web.waitForSelector('#admOrders .order');
-    const card = await web.textContent('#admOrders .order');
-    assert.match(card, /Виконана/); assert.match(card, /Встановлено, траса 4 м/);
-    assert.equal(await web.inputValue(`[data-omaster="${id}"]`), 'm3');
-    console.log('✔ адмінка: статус «Виконана», майстер і нотатка видні');
+    /* 3. Клієнт на сайті бачить статус і залишає відгук */
+    await web.goto('http://localhost:3000/web/#cabinet'); await web.waitForSelector(`[data-oid="${id}"] .st.done`);
+    assert.match(await web.textContent(`[data-oid="${id}"]`), /Встановлено на 2-му поверсі/);
+    await web.fill(`[data-rv="${id}"] textarea`, 'Майстер приїхав вчасно, все акуратно'); await web.click(`[data-rv="${id}"] button[type=submit]`);
+    await web.waitForSelector(`[data-oid="${id}"] .stars`);
+    await shot(web, 'e2e-web-cabinet');
+    step('сайт: клієнт бачить «Виконана» і нотатку майстра, залишив відгук');
 
-    // 4. Клієнт бачить статус на сайті
-    await web.goto(base + '/web/#order'); await web.waitForSelector('#myOrders:not([hidden])');
-    assert.match(await web.textContent('#myOrders'), /Виконана/);
-    console.log('✔ клієнт: бачить статус «Виконана»');
+    /* 4. Клієнт у мобільному застосунку бачить ту саму заявку */
+    const c = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 }); watch(c);
+    await c.goto('http://localhost:8081/'); await c.getByTestId('login-email').waitFor();
+    await c.getByTestId('login-email').fill('e2e@test.ua'); await c.getByTestId('login-password').fill('Klima2026'); await c.getByTestId('login-submit').click();
+    await c.getByTestId('tab-OrdersTab').click(); await c.getByTestId('order-' + id).waitFor();
+    assert.match(await c.getByTestId('order-' + id).textContent(), /Виконана/);
+    step('застосунок: клієнт бачить заявку з сайту зі статусом «Виконана»');
 
-    // 5. Відгук із застосунку з'являється на сайті
-    const cli = await browser.newPage({ viewport: { width: 390, height: 844 } }); watch(cli);
-    await cli.goto(base + '/mobile/');
-    await cli.evaluate(() => fetch('/api/reviews', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: 'Мобільний відгук', text: 'Все чудово', stars: 5, master: 'm3', source: 'mobile' }) }));
-    await web.goto(base + '/web/#reviews'); await web.waitForSelector('text=Мобільний відгук');
-    console.log('✔ відгук із застосунку видно на сайті');
+    /* 5. Адміністратор на сайті */
+    await web.click('#logoutBtn');
+    await web.goto('http://localhost:3000/web/#login'); await web.fill('#lEmail', 'admin@smartklima.ua'); await web.fill('#lPass', 'Admin123!'); await web.click('#loginForm button[type=submit]');
+    await web.waitForSelector(`#admOrders [data-oid="${id}"]`);
+    const card = await web.textContent(`#admOrders [data-oid="${id}"]`);
+    assert.match(card, /Виконана/); assert.match(card, /Сайт/);
+    await web.goto('http://localhost:3000/web/#reviews'); await web.waitForSelector('text=Майстер приїхав вчасно');
+    step('сайт: адміністратор бачить заявку і журнал, відгук опубліковано');
 
     assert.deepEqual(errors, [], 'помилки в консолі: ' + errors.join('; '));
     console.log('\nE2E: усі кроки пройдено, помилок у консолі немає');
-  } finally { await browser.close(); srv.server.close(); }
+  } finally { await browser.close(); srv.server.close(); mob.close(); }
 })().catch(e => { console.error('✖', e.message); process.exit(1); });

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Smart Klima</title>
 <meta name="description" content="Продаж і монтаж кондиціонерів у Києві: каталог, калькулятор монтажу, майстри, відгуки.">
-<link rel="icon" href="../mobile/icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
 <link rel="stylesheet" href="styles.css">
@@ -23,9 +23,10 @@
       <a href="#reviews" data-nav="reviews">Відгуки</a>
       <a href="#faq" data-nav="faq">Питання</a>
       <a href="#contacts" data-nav="contacts">Контакти</a>
-      <a href="../mobile/">Застосунок</a>
+      <a href="#admin" class="adm" data-nav="admin" id="navAdmin" hidden>Адмінка</a>
     </nav>
-    <a class="cartbtn" id="cartBtn" href="#order" style="text-decoration:none;color:inherit">Заявка <b id="cartCount">0</b></a>
+    <a class="cartbtn" id="cartBtn" href="#order" style="text-decoration:none;color:inherit">Запис <b id="cartCount">0</b></a>
+    <a class="cartbtn" id="accBtn" href="#login" style="text-decoration:none;color:inherit">Увійти</a>
     <button class="burger" id="burger" type="button" aria-label="Меню" aria-expanded="false">☰</button>
   </div>
 </header>
@@ -124,7 +125,7 @@
     <div class="wrap">
       <div class="band">
         <div><h2>Не знаєте, що обрати?</h2><p>Майстер приїде, заміряє і порадить модель. Огляд безкоштовний.</p></div>
-        <a class="btn primary" href="#order">Викликати на огляд</a>
+        <a class="btn primary" href="#order" data-kind="inspection">Записатися на огляд</a>
       </div>
     </div>
   </section>
@@ -251,7 +252,7 @@
             <div class="eyebrow" style="margin-bottom:8px">Підходять з каталогу</div>
             <div class="rec" id="rRec"></div>
           </div>
-          <button class="btn primary" type="button" id="calcOrder">Додати монтаж до заявки</button>
+          <button class="btn primary" type="button" id="calcOrder">Записатися на монтаж з цими умовами</button>
           <p class="note">Розрахунок орієнтовний. Остаточну ціну майстер підтверджує після огляду, безкоштовно.</p>
         </div>
       </div>
@@ -324,15 +325,10 @@
             <div class="note" id="revCount"></div>
             <div class="dist" id="dist"></div>
           </div>
-          <form class="panel rev-form" id="revForm">
-            <h3 id="revFormTitle">Залишити відгук</h3>
-            <div class="f"><label>Оцінка</label><div class="star-pick" id="starPick"></div></div>
-            <div class="f"><label for="rvName">Ім'я</label><input type="text" id="rvName" required maxlength="40" placeholder="Олена"></div>
-            <div class="f"><label for="rvMaster">Майстер</label><select id="rvMaster"></select></div>
-            <div class="f"><label for="rvText">Відгук</label><textarea id="rvText" rows="3" required maxlength="600" placeholder="Як усе пройшло?"></textarea></div>
-            <button class="btn primary" type="submit" id="rvSubmit">Опублікувати</button>
-            <p class="note">Відгук з'явиться одразу і на сайті, і в застосунку.</p>
-          </form>
+          <div class="panel rev-form">
+            <h3>Залишити відгук</h3>
+            <p class="note" style="font-size:.9rem;margin:0">Відгук може залишити клієнт після виконання робіт: у <a href="#cabinet">кабінеті</a> на сайті або в мобільному застосунку. Так усі відгуки на сайті справжні.</p>
+          </div>
         </div>
         <div>
           <div class="filters" id="revFilter"></div>
@@ -383,37 +379,54 @@
       </div>
       <div class="band" style="margin-top:32px">
         <div><h2>Працюємо по Києву та області</h2><p>Виїзд по місту безкоштовний. За межами Києва 15 ₴/км від Окружної.</p></div>
-        <a class="btn primary" href="#order">Залишити заявку</a>
+        <a class="btn primary" href="#order">Записатися</a>
       </div>
     </div>
   </section>
 </div>
 
-<!-- ================= ORDER ================= -->
+<!-- ================= ORDER / BOOKING ================= -->
 <div class="view" data-view="order" hidden>
   <div class="wrap page-head">
-    <div class="crumbs"><a href="#home">Головна</a><span>/</span><span>Заявка</span></div>
-    <h1>Ваша заявка</h1>
+    <div class="crumbs"><a href="#home">Головна</a><span>/</span><span>Запис на виїзд</span></div>
+    <h1>Запис на виїзд</h1>
+    <p>Оберіть, що потрібно, день і час. Майстра підбере система за розкладом, або оберіть самі.</p>
   </div>
   <section>
     <div class="wrap orderpage">
-      <div class="panel">
-        <h3>Що замовляєте</h3>
+      <div class="panel" style="display:grid;gap:14px">
+        <div class="seg" id="bKind">
+          <button type="button" data-k="install" aria-pressed="true">Монтаж</button>
+          <button type="button" data-k="service" aria-pressed="false">Сервіс</button>
+          <button type="button" data-k="inspection" aria-pressed="false">Безкоштовний огляд</button>
+        </div>
         <div id="dItems"></div>
-        <div class="row" id="dTotalRow" style="display:flex;justify-content:space-between;margin-top:12px"><b>Разом</b><b class="num" id="dTotal">0 ₴</b></div>
-        <div class="myorders" id="myOrders" hidden style="margin-top:16px"></div>
+        <div id="bInstall" class="note"></div>
+        <div class="row" id="dTotalRow" style="display:flex;justify-content:space-between"><b>Разом</b><b class="num" id="dTotal">0 ₴</b></div>
+        <div>
+          <h3 style="margin-bottom:8px">День</h3>
+          <div class="filters" id="bDays" style="margin:0"></div>
+        </div>
+        <div class="f" style="margin:0"><label for="oMaster">Майстер</label><select id="oMaster"></select></div>
+        <div>
+          <h3 style="margin-bottom:8px">Час</h3>
+          <div class="filters" id="bSlots" style="margin:0"></div>
+        </div>
       </div>
       <div class="panel">
+        <div id="bNeedLogin" hidden>
+          <h3>Увійдіть, щоб записатися</h3>
+          <p class="note" style="font-size:.92rem">Акаунт потрібен, щоб ви бачили статус заявки на сайті та в застосунку, а майстер міг з вами зв'язатися.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn primary" href="#login">Увійти</a><a class="btn ghost" href="#register">Зареєструватися</a></div>
+        </div>
         <form id="orderForm">
           <h3>Контакти</h3>
-          <div class="f"><label for="oName">Ім'я</label><input type="text" id="oName" required maxlength="60"></div>
+          <div class="f"><label for="oName">Контактна особа</label><input type="text" id="oName" required maxlength="60"></div>
           <div class="f"><label for="oPhone">Телефон</label><input type="tel" id="oPhone" required placeholder="+380 67 123 45 67" maxlength="20"></div>
-          <div class="f"><label for="oAddr">Адреса</label><input type="text" id="oAddr" maxlength="120" placeholder="Місто, вулиця, поверх"></div>
-          <div class="f"><label for="oDate">Коли зручно</label><input type="text" id="oDate" maxlength="60" placeholder="наприклад, субота зранку"></div>
-          <div class="f"><label for="oMaster">Майстер</label><select id="oMaster"></select></div>
+          <div class="f"><label for="oAddr">Адреса</label><input type="text" id="oAddr" required maxlength="160" placeholder="Вулиця, будинок, квартира, поверх"></div>
           <div class="f"><label for="oComment">Коментар</label><textarea id="oComment" rows="2" maxlength="400"></textarea></div>
-          <button class="btn primary" type="submit" id="oSubmit" style="width:100%">Надіслати заявку</button>
-          <p class="note" id="oErr" hidden></p>
+          <button class="btn primary" type="submit" id="oSubmit" style="width:100%">Оберіть час</button>
+          <p class="note" id="oErr" hidden style="color:var(--heat);font-weight:600"></p>
         </form>
         <div id="dOk" hidden style="display:grid;gap:12px"></div>
       </div>
@@ -421,53 +434,74 @@
   </section>
 </div>
 
+<!-- ================= LOGIN / REGISTER ================= -->
+<div class="view" data-view="login" hidden>
+  <div class="wrap page-head"><h1>Вхід</h1><p>Один акаунт для сайту і мобільного застосунку.</p></div>
+  <section><div class="wrap">
+    <form class="panel" id="loginForm" style="max-width:440px">
+      <div class="f"><label for="lEmail">E-mail</label><input type="email" id="lEmail" required autocomplete="email" class="inp"></div>
+      <div class="f"><label for="lPass">Пароль</label><input type="password" id="lPass" required autocomplete="current-password" class="inp"></div>
+      <button class="btn primary" type="submit" style="width:100%">Увійти</button>
+      <p class="note err" id="lErr" hidden></p>
+      <p class="note">Немає акаунта? <a href="#register">Зареєструйтеся</a>.</p>
+    </form>
+  </div></section>
+</div>
+<div class="view" data-view="register" hidden>
+  <div class="wrap page-head"><h1>Реєстрація</h1><p>Після реєстрації можна записатися на виїзд і стежити за статусом.</p></div>
+  <section><div class="wrap">
+    <form class="panel" id="regForm" style="max-width:440px">
+      <div class="f"><label for="rName">Ім'я</label><input type="text" id="rName" required maxlength="60" autocomplete="name" class="inp"></div>
+      <div class="f"><label for="rEmail">E-mail</label><input type="email" id="rEmail" required autocomplete="email" class="inp"></div>
+      <div class="f"><label for="rPhone">Телефон</label><input type="tel" id="rPhone" required placeholder="+380 67 123 45 67" class="inp"></div>
+      <div class="f"><label for="rPass">Пароль</label><input type="password" id="rPass" required autocomplete="new-password" placeholder="щонайменше 8 символів, літера і цифра" class="inp"></div>
+      <button class="btn primary" type="submit" style="width:100%">Створити акаунт</button>
+      <p class="note err" id="rErr" hidden></p>
+    </form>
+  </div></section>
+</div>
+
+<!-- ================= CABINET ================= -->
+<div class="view" data-view="cabinet" hidden>
+  <div class="wrap page-head">
+    <div class="crumbs"><a href="#home">Головна</a><span>/</span><span>Кабінет</span></div>
+    <div class="head" style="margin:0"><h1 id="cabTitle">Мої заявки</h1><button class="btn ghost sm" type="button" id="logoutBtn">Вийти</button></div>
+    <p id="cabSub"></p>
+  </div>
+  <section><div class="wrap"><div class="orders" id="cabOrders"></div></div></section>
+</div>
+
+
 <!-- ================= ADMIN ================= -->
 <div class="view" data-view="admin" hidden>
   <div class="wrap page-head">
-    <div class="eyebrow" style="color:var(--heat)">Для персоналу</div>
+    <div class="eyebrow" style="color:var(--heat)">Для адміністратора</div>
     <div class="head" style="margin:0"><h1>Адмінка</h1><span class="sync" id="admSync"></span></div>
-    <p>Заявки з сайту і з мобільного застосунку в одному списку. Зміни бачать і клієнти, і майстри в застосунку.</p>
+    <p>Заявки з сайту і мобільного застосунку в одному списку. Зміни одразу бачать клієнт і майстер.</p>
   </div>
   <section>
     <div class="wrap">
-      <form class="panel" id="admLogin" style="max-width:420px">
-        <h3>Вхід</h3>
-        <div class="f"><label for="admKey">Ключ адміністратора</label><input type="password" id="admKey" autocomplete="current-password" required style="border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:9px 11px;width:100%"></div>
-        <button class="btn primary" type="submit">Увійти</button>
-        <p class="note" id="admErr" hidden></p>
-        <p class="note" id="admDemoHint" hidden>Демо-режим: ключ <b class="num">admin123</b>.</p>
-      </form>
-      <div id="admPanel" hidden>
-      <div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button class="btn ghost sm" type="button" id="admLogout">Вийти</button></div>
-      <div class="kpis">
-        <div class="kpi"><b id="kNew">0</b><span>нових заявок</span></div>
-        <div class="kpi"><b id="kConf">0</b><span>підтверджених</span></div>
-        <div class="kpi"><b id="kDone">0</b><span>виконаних</span></div>
-        <div class="kpi"><b id="kSum">0 ₴</b><span>виручка з виконаних</span></div>
-      </div>
+      <div class="kpis" id="admKpis"></div>
       <div class="tabs" id="admTabs">
         <button class="chip" type="button" data-t="orders" aria-pressed="true">Заявки</button>
-        <button class="chip" type="button" data-t="masters" aria-pressed="false">Графік майстрів</button>
+        <button class="chip" type="button" data-t="analytics" aria-pressed="false">Аналітика</button>
+        <button class="chip" type="button" data-t="masters" aria-pressed="false">Майстри</button>
+        <button class="chip" type="button" data-t="users" aria-pressed="false">Користувачі</button>
       </div>
       <div id="tabOrders">
         <div class="filters" style="margin-bottom:12px">
           <select id="admSource" aria-label="Джерело"><option value="">Сайт і застосунок</option><option value="web">Лише сайт</option><option value="mobile">Лише застосунок</option></select>
-          <select id="admFilter" aria-label="Статус">
-            <option value="">Усі статуси</option>
-            <option value="new">Нові</option>
-            <option value="confirmed">Підтверджені</option>
-            <option value="onway">Майстер виїхав</option>
-            <option value="done">Виконані</option>
-            <option value="cancelled">Скасовані</option>
-          </select>
+          <select id="admFilter" aria-label="Статус"><option value="">Усі статуси</option></select>
+          <select id="admMasterF" aria-label="Майстер"><option value="">Усі майстри</option></select>
         </div>
         <div class="orders" id="admOrders"></div>
       </div>
-      <div id="tabMasters" hidden>
-        <p class="note" style="margin-top:0">Перемикач змінює статус «Вільний сьогодні» на картках майстрів для всіх відвідувачів.</p>
-        <div style="display:grid;gap:10px;max-width:520px" id="admMasters"></div>
+      <div id="tabAnalytics" hidden>
+        <div class="filters" style="margin-bottom:12px"><select id="anDays" aria-label="Період"><option value="7">7 днів</option><option value="30" selected>30 днів</option><option value="90">90 днів</option><option value="365">рік</option></select></div>
+        <div class="angrid" id="anBox"></div>
       </div>
-      </div>
+      <div id="tabMasters" hidden><div style="display:grid;gap:10px;max-width:620px" id="admMasters"></div></div>
+      <div id="tabUsers" hidden><div class="tablewrap"><table class="ctable" id="admUsers"></table></div></div>
     </div>
   </section>
 </div>
@@ -478,18 +512,16 @@
   <div class="wrap">
     <div class="fgrid">
       <div><a class="logo" href="#home" style="padding:0"><i>❄</i>Smart Klima</a><p>Продаж, монтаж і сервіс кондиціонерів у Києві та області з 2014 року.</p></div>
-      <div><h4>Магазин</h4><a href="#catalog">Каталог</a><a href="#compare">Порівняння</a><a href="#calc">Калькулятор</a><a href="#order">Заявка</a></div>
+      <div><h4>Магазин</h4><a href="#catalog">Каталог</a><a href="#compare">Порівняння</a><a href="#calc">Калькулятор</a><a href="#order">Запис на виїзд</a></div>
       <div><h4>Сервіс</h4><a href="#services">Послуги</a><a href="#masters">Майстри</a><a href="#reviews">Відгуки</a><a href="#faq">Питання</a></div>
-      <div><h4>Контакти</h4><a href="#contacts">+38 (067) 000-24-24</a><a href="#contacts">@smartklima_ua</a><a href="../mobile/">Мобільний застосунок</a><a href="#admin">Вхід для персоналу</a></div>
+      <div><h4>Контакти</h4><a href="#contacts">+38 (067) 000-24-24</a><a href="#contacts">@smartklima_ua</a><a href="#login">Вхід</a><a href="#cabinet">Мої заявки</a></div>
     </div>
-    <div class="note">© 2026 Smart Klima. Ціни, майстри й телефони на сайті є прикладом, замініть на свої. <span id="modeNote"></span></div>
+    <div class="note">© 2026 Smart Klima. Ціни, майстри й телефони на сайті є прикладом, замініть на свої.</div>
   </div>
 </footer>
 <div class="toast" id="toast" hidden></div>
 
-<script src="../shared/seed.js"></script>
-<script src="../shared/config.js"></script>
-<script src="../shared/api.js"></script>
+<script src="api.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

@@ -4,3 +4,6 @@ data/
 *.db-shm
 *.db-wal
 .env
+mobile/node_modules/
+mobile/dist/
+mobile/.expo/
