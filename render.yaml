@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: smart-klima
+    runtime: node
+    plan: starter
+    buildCommand: "true"
+    startCommand: node server/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22.13.0"
+      - key: DB_PATH
+        value: /var/data/smartklima.db
+      - key: ADMIN_KEY
+        generateValue: true
+    disk:
+      name: data
+      mountPath: /var/data
+      sizeGB: 1

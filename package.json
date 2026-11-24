@@ -1,0 +1,12 @@
+{
+  "name": "smart-klima",
+  "version": "1.0.0",
+  "description": "Продаж і монтаж кондиціонерів: веб-сайт і мобільний застосунок на одній базі даних",
+  "private": true,
+  "license": "MIT",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "start": "node server/server.js",
+    "test": "node --test test/*.test.js"
+  }
+}

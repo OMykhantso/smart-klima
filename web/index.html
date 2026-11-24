@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Smart Klima</title>
+<meta name="description" content="Продаж і монтаж кондиціонерів у Києві: каталог, калькулятор монтажу, майстри, відгуки.">
+<link rel="icon" href="../mobile/icons/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#home"><i>❄</i>Smart Klima</a>
+    <nav id="navLinks">
+      <a href="#catalog" data-nav="catalog model compare">Каталог</a>
+      <a href="#calc" data-nav="calc">Калькулятор</a>
+      <a href="#services" data-nav="services">Послуги</a>
+      <a href="#masters" data-nav="masters master">Майстри</a>
+      <a href="#reviews" data-nav="reviews">Відгуки</a>
+      <a href="#faq" data-nav="faq">Питання</a>
+      <a href="#contacts" data-nav="contacts">Контакти</a>
+      <a href="../mobile/">Застосунок</a>
+    </nav>
+    <a class="cartbtn" id="cartBtn" href="#order" style="text-decoration:none;color:inherit">Заявка <b id="cartCount">0</b></a>
+    <button class="burger" id="burger" type="button" aria-label="Меню" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<main id="app">
+
+<!-- ================= HOME ================= -->
+<div class="view" data-view="home">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <div class="eyebrow">Продаж · Монтаж · Сервіс</div>
+        <h1>Кондиціонер з монтажем <em>за 1 день</em></h1>
+        <p>Підберемо потужність під вашу кімнату, привеземо і встановимо. Ціну монтажу видно одразу в калькуляторі, без «а ще доплатіть за дірку».</p>
+        <div class="cta">
+          <a class="btn primary" href="#calc">Порахувати монтаж</a>
+          <a class="btn ghost" href="#catalog">Дивитись каталог</a>
+        </div>
+        <div class="facts">
+          <div><b class="num">2 400+</b><span>встановлених систем</span></div>
+          <div><b class="num">3 роки</b><span>гарантії на монтаж</span></div>
+          <div><b class="num" id="heroRating">4,8</b><span>середня оцінка</span></div>
+        </div>
+      </div>
+      <div class="remote" aria-label="Демо-пульт">
+        <div class="lcd">
+          <div class="t"><span id="rTemp">22</span><sup>°C</sup></div>
+          <div class="m"><div id="rMode">❄ ОХОЛОДЖ.</div><div>ВЕНТ ▮▮▯</div></div>
+          <div class="bar" id="rBar"></div>
+        </div>
+        <div class="keys">
+          <button type="button" id="kDown" aria-label="Менше">−</button>
+          <button type="button" id="kUp" aria-label="Більше">+</button>
+          <button type="button" id="kMode">MODE</button>
+          <button type="button" class="pw" id="kPow">ON/OFF</button>
+        </div>
+        <small>Натисніть кнопки. Пульт для настрою, кондиціонер не увімкнеться.</small>
+      </div>
+    </div>
+  </div>
+
+  <section style="padding-top:16px">
+    <div class="wrap">
+      <div class="head"><div><div class="eyebrow">Швидкий підбір</div><h2>Яка у вас площа?</h2></div></div>
+      <div class="areas" id="homeAreas">
+        <a href="#catalog" data-area="20"><b>20 м²</b><span>Спальня, кухня</span></a>
+        <a href="#catalog" data-area="25"><b>25 м²</b><span>Велика спальня</span></a>
+        <a href="#catalog" data-area="35"><b>35 м²</b><span>Вітальня</span></a>
+        <a href="#catalog" data-area="50"><b>50 м²</b><span>Студія, офіс</span></a>
+        <a href="#catalog" data-area="70"><b>70 м²</b><span>Зал, магазин</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="head"><div><div class="eyebrow">Хіти продажу</div><h2>Найчастіше беруть</h2></div><a class="btn ghost sm" href="#catalog">Весь каталог →</a></div>
+      <div class="grid" id="homeHits"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="head"><div><div class="eyebrow">Як ми працюємо</div><h2>Від заявки до холоду</h2></div></div>
+      <ol class="steps">
+        <li><b>Заявка</b><span>Через сайт або телефон. Передзвонимо протягом 15 хвилин у робочий час.</span></li>
+        <li><b>Безкоштовний огляд</b><span>Майстер заміряє трасу, обере місце під блоки, підтвердить ціну.</span></li>
+        <li><b>Монтаж</b><span>3–4 години на спліт-систему. Вакуумуємо трасу, перевіряємо тиск.</span></li>
+        <li><b>Гарантія</b><span>Акт робіт, 3 роки на монтаж, перше чищення через рік зі знижкою 30%.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="head"><div><div class="eyebrow">Сервіс</div><h2>Обслуговування і ремонт</h2></div><a class="btn ghost sm" href="#services">Усі послуги →</a></div>
+      <div class="svc" id="homeSvc"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="head"><div><div class="eyebrow">Майстри</div><h2>Хто приїде до вас</h2></div><a class="btn ghost sm" href="#masters">Усі майстри →</a></div>
+      <div class="strip" id="homeMasters"></div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="head"><div><div class="eyebrow">Відгуки</div><h2>Що кажуть клієнти</h2></div><a class="btn ghost sm" href="#reviews">Усі відгуки →</a></div>
+      <div class="reviews" id="homeReviews" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="band">
+        <div><h2>Не знаєте, що обрати?</h2><p>Майстер приїде, заміряє і порадить модель. Огляд безкоштовний.</p></div>
+        <a class="btn primary" href="#order">Викликати на огляд</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= CATALOG ================= -->
+<div class="view" data-view="catalog" hidden>
+  <div class="wrap page-head">
+    <div class="crumbs"><a href="#home">Головна</a><span>/</span><span>Каталог</span></div>
+    <h1>Кондиціонери в наявності</h1>
+    <p>Площа вказана для кімнати зі стелею 2,7 м. Для точного підбору скористайтесь <a href="#calc">калькулятором</a>.</p>
+  </div>
+  <section>
+    <div class="wrap">
+      <div class="filters" id="filters">
+        <button class="chip" type="button" data-f="all" aria-pressed="true">Усі</button>
+        <button class="chip" type="button" data-f="inv" aria-pressed="false">Інверторні</button>
+        <button class="chip" type="button" data-f="heat" aria-pressed="false">Обігрів до −25°C</button>
+        <button class="chip" type="button" data-f="wifi" aria-pressed="false">Wi‑Fi</button>
+        <button class="chip" type="button" data-f="sale" aria-pressed="false">Знижка</button>
+      </div>
+      <div class="filters">
+        <input type="search" id="fSearch" placeholder="Пошук моделі" aria-label="Пошук моделі">
+        <select id="fBrand" aria-label="Бренд"><option value="">Усі бренди</option></select>
+        <select id="fArea" aria-label="Площа">
+          <option value="0">Будь-яка площа</option>
+          <option value="20">до 20 м²</option>
+          <option value="25">до 25 м²</option>
+          <option value="35">до 35 м²</option>
+          <option value="50">до 50 м²</option>
+          <option value="70">до 70 м²</option>
+        </select>
+        <select id="fSort" aria-label="Сортування">
+          <option value="price">Спочатку дешевші</option>
+          <option value="-price">Спочатку дорожчі</option>
+          <option value="noise">Найтихіші</option>
+        </select>
+        <a href="#compare" class="btn ghost sm" id="cmpLink" hidden>Порівняти (<span id="cmpCount">0</span>)</a>
+      </div>
+      <p class="note" id="foundCount" style="margin:-8px 0 14px"></p>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= PRODUCT ================= -->
+<div class="view" data-view="model" hidden>
+  <div class="wrap page-head" style="padding-bottom:0">
+    <div class="crumbs"><a href="#home">Головна</a><span>/</span><a href="#catalog">Каталог</a><span>/</span><span id="pCrumb"></span></div>
+  </div>
+  <section>
+    <div class="wrap">
+      <div class="prod" id="prodBox"></div>
+    </div>
+  </section>
+  <section class="alt">
+    <div class="wrap">
+      <div class="head"><div><div class="eyebrow">Схожі моделі</div><h2>Того ж класу потужності</h2></div></div>
+      <div class="grid" id="prodSimilar"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= COMPARE ================= -->
+<div class="view" data-view="compare" hidden>
+  <div class="wrap page-head">
+    <div class="crumbs"><a href="#home">Головна</a><span>/</span><a href="#catalog">Каталог</a><span>/</span><span>Порівняння</span></div>
+    <h1>Порівняння моделей</h1>
+    <p>Додавайте до 4 моделей кнопкою «⇄» у каталозі. Найкраще значення в рядку виділено зеленим.</p>
+  </div>
+  <section><div class="wrap" id="cmpBox"></div></section>
+</div>
+
+<!-- ================= CALC ================= -->
+<div class="view" data-view="calc" hidden>
+  <div class="wrap page-head">
+    <div class="crumbs"><a href="#home">Головна</a><span>/</span><span>Калькулятор</span></div>
+    <h1>Потужність і вартість монтажу</h1>
+    <p>Рахуємо за формулою Q = S × h × q + люди + техніка, де q залежить від сонячної сторони. Ціни монтажу фіксовані.</p>
+  </div>
+  <section>
+    <div class="wrap">
+      <div class="calc">
+        <div class="panel">
+          <h3>Приміщення</h3>
+          <div class="f"><label for="cArea">Площа <output id="oArea" class="num">20 м²</output></label><input type="range" id="cArea" min="8" max="80" value="20"></div>
+          <div class="f"><label for="cH">Висота стелі <output id="oH" class="num">2,7 м</output></label><input type="range" id="cH" min="2.4" max="4" step="0.1" value="2.7"></div>
+          <div class="f"><label>Сторона</label>
+            <div class="seg" id="cSun">
+              <button type="button" data-q="30" aria-pressed="false">Тінь / північ</button>
+              <button type="button" data-q="35" aria-pressed="true">Звичайна</button>
+              <button type="button" data-q="40" aria-pressed="false">Сонячна / південь</button>
+            </div>
+          </div>
+          <div class="f"><label for="cPeople">Людей постійно <output id="oPeople" class="num">2</output></label><input type="range" id="cPeople" min="1" max="10" value="2"></div>
+          <div class="f"><label for="cTech">Техніка (ПК, ТВ, плита) <output id="oTech" class="num">0,3 кВт</output></label><input type="range" id="cTech" min="0" max="2" step="0.1" value="0.3"></div>
+
+          <h3 style="margin-top:22px">Монтаж</h3>
+          <div class="f"><label for="cRoute">Довжина траси <output id="oRoute" class="num">3 м</output></label><input type="range" id="cRoute" min="1" max="20" value="3"></div>
+          <div class="f"><label for="cFloor">Поверх</label>
+            <select id="cFloor">
+              <option value="0">1–2 поверх (з драбини)</option>
+              <option value="800">3–5 поверх (альпіністи)</option>
+              <option value="1500">6+ поверх (альпіністи)</option>
+            </select>
+          </div>
+          <div class="checks">
+            <label><input type="checkbox" id="xWall" checked> Свердління стіни (бетон / цегла) <span class="p">500 ₴</span></label>
+            <label><input type="checkbox" id="xBox"> Декор-короб для траси <span class="p">180 ₴/м</span></label>
+            <label><input type="checkbox" id="xHidden"> Прихована траса в штробі <span class="p">450 ₴/м</span></label>
+            <label><input type="checkbox" id="xPump"> Дренажна помпа <span class="p">1 900 ₴</span></label>
+            <label><input type="checkbox" id="xOld"> Демонтаж старого кондиціонера <span class="p">1 200 ₴</span></label>
+            <label><input type="checkbox" id="xFence"> Захисний кошик на зовнішній блок <span class="p">950 ₴</span></label>
+          </div>
+        </div>
+        <div class="panel result">
+          <h3>Результат</h3>
+          <div class="big">
+            <div class="kw"><b id="rKw" class="num">2,4</b><span>кВт холоду потрібно</span></div>
+            <div><b id="rBtu" class="num">09</b><span>клас (тис. BTU)</span></div>
+          </div>
+          <ul class="lines" id="rLines"></ul>
+          <div>
+            <div class="eyebrow" style="margin-bottom:8px">Підходять з каталогу</div>
+            <div class="rec" id="rRec"></div>
+          </div>
+          <button class="btn primary" type="button" id="calcOrder">Додати монтаж до заявки</button>
+          <p class="note">Розрахунок орієнтовний. Остаточну ціну майстер підтверджує після огляду, безкоштовно.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= SERVICES ================= -->
+<div class="view" data-view="services" hidden>
+  <div class="wrap page-head">
+    <div class="crumbs"><a href="#home">Головна</a><span>/</span><span>Послуги</span></div>
+    <h1>Обслуговування і ремонт</h1>
+    <p>Кондиціонер треба чистити раз на рік, інакше падає потужність і з'являється запах. Обслуговуємо будь-які бренди, навіть куплені не в нас.</p>
+  </div>
+  <section><div class="wrap"><div class="svc" id="svcList"></div></div></section>
+  <section class="alt">
+    <div class="wrap">
+      <div class="head"><div><div class="eyebrow">Ознаки</div><h2>Коли час викликати майстра</h2></div></div>
+      <ul class="perks" style="max-width:720px">
+        <li>З кондиціонера капає вода в кімнату</li>
+        <li>Неприємний запах при вмиканні</li>
+        <li>Охолоджує слабше, ніж минулого літа</li>
+        <li>Зовнішній блок обмерзає або гуде</li>
+        <li>На дисплеї код помилки (E1, F0, H6 тощо)</li>
+        <li>Минуло більше року від останнього чищення</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<!-- ================= MASTERS ================= -->
+<div class="view" data-view="masters" hidden>
+  <div class="wrap page-head">
+    <div class="crumbs"><a href="#home">Головна</a><span>/</span><span>Майстри</span></div>
+    <h1>Наші майстри</h1>
+    <p>Усі майстри в штаті, з допуском до висотних робіт і роботи з фреоном.</p>
+  </div>
+  <section><div class="wrap"><div class="masters" id="mastersList"></div></div></section>
+</div>
+
+<!-- ================= MASTER PROFILE ================= -->
+<div class="view" data-view="master" hidden>
+  <div class="wrap page-head" style="padding-bottom:0">
+    <div class="crumbs"><a href="#home">Головна</a><span>/</span><a href="#masters">Майстри</a><span>/</span><span id="mCrumb"></span></div>
+  </div>
+  <section>
+    <div class="wrap mprof">
+      <div id="mProfCard"></div>
+      <div>
+        <div class="head" style="margin-bottom:14px"><div><div class="eyebrow">Відгуки про майстра</div><h2 id="mRevTitle">Відгуки</h2></div></div>
+        <div class="reviews" id="mRevList"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= REVIEWS ================= -->
+<div class="view" data-view="reviews" hidden>
+  <div class="wrap page-head">
+    <div class="crumbs"><a href="#home">Головна</a><span>/</span><span>Відгуки</span></div>
+    <div class="head" style="margin:0"><h1>Відгуки клієнтів</h1><span class="sync live" id="revSync">Спільні з застосунком</span></div>
+  </div>
+  <section>
+    <div class="wrap">
+      <div class="rev-layout">
+        <div>
+          <div class="score">
+            <div class="avg" id="avg">–</div>
+            <div class="stars" id="avgStars"></div>
+            <div class="note" id="revCount"></div>
+            <div class="dist" id="dist"></div>
+          </div>
+          <form class="panel rev-form" id="revForm">
+            <h3 id="revFormTitle">Залишити відгук</h3>
+            <div class="f"><label>Оцінка</label><div class="star-pick" id="starPick"></div></div>
+            <div class="f"><label for="rvName">Ім'я</label><input type="text" id="rvName" required maxlength="40" placeholder="Олена"></div>
+            <div class="f"><label for="rvMaster">Майстер</label><select id="rvMaster"></select></div>
+            <div class="f"><label for="rvText">Відгук</label><textarea id="rvText" rows="3" required maxlength="600" placeholder="Як усе пройшло?"></textarea></div>
+            <button class="btn primary" type="submit" id="rvSubmit">Опублікувати</button>
+            <p class="note">Відгук з'явиться одразу і на сайті, і в застосунку.</p>
+          </form>
+        </div>
+        <div>
+          <div class="filters" id="revFilter"></div>
+          <div class="reviews" id="revList"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= FAQ ================= -->
+<div class="view" data-view="faq" hidden>
+  <div class="wrap page-head">
+    <div class="crumbs"><a href="#home">Головна</a><span>/</span><span>Питання</span></div>
+    <h1>Часті запитання</h1>
+    <p>Не знайшли відповідь? Напишіть у Telegram <b>@smartklima_ua</b>.</p>
+  </div>
+  <section>
+    <div class="wrap">
+      <div class="faq">
+        <details open><summary>Чим інвертор кращий за on/off?</summary><p>Інвертор плавно змінює потужність замість постійного вмикання-вимикання. Споживає на 30–40% менше електрики, тихіший і довше служить. On/off дешевший на старті, підходить для дачі чи рідкого використання.</p></details>
+        <details><summary>Як вибрати потужність?</summary><p>Грубо: 1 кВт холоду на 10 м² при стелі 2,7 м. Точніше порахує наш <a href="#calc">калькулятор</a>, він враховує сонячну сторону, людей і техніку. Брати з великим запасом не варто: кондиціонер частіше вимикатиметься і гірше осушуватиме повітря.</p></details>
+        <details><summary>Що входить у базовий монтаж?</summary><p>До 3 м мідної траси з теплоізоляцією, кабель, дренаж, кронштейни для зовнішнього блока, одне свердління, вакуумування системи і пусконалагодження. Усе інше видно окремими рядками в калькуляторі.</p></details>
+        <details><summary>Чи можна ставити взимку?</summary><p>Так, до −10°C на вулиці. Мідь паяємо і вакуумуємо так само, як улітку. Взимку майстри вільніші, тож монтаж часто можна зробити наступного дня.</p></details>
+        <details><summary>Скільки триває монтаж і чи буде бруд?</summary><p>3–4 години на одну спліт-систему. Свердлимо з пилососом, меблі накриваємо плівкою, після роботи прибираємо.</p></details>
+        <details><summary>Чи можна гріти кондиціонером взимку?</summary><p>Так. Інвертор з обігрівом до −15°C дає 3–4 кВт тепла на 1 кВт електрики, це в 3 рази дешевше за обігрівач. Для морозів до −25°C і нижче беріть моделі з позначкою «Обігрів до −25°C».</p></details>
+        <details><summary>Що з гарантією?</summary><p>На кондиціонер діє гарантія виробника від 2 до 5 років залежно від бренду. На наш монтаж додатково 3 роки. Якщо щось потече через монтаж, переробимо безкоштовно.</p></details>
+        <details><summary>Як оплатити?</summary><p>Готівкою або карткою майстру після монтажу, переказом на рахунок ФОП. Для юросіб з ПДВ. Є оплата частинами від банку на 4–10 місяців.</p></details>
+        <details><summary>Чи потрібен дозвіл ОСББ на зовнішній блок?</summary><p>Для більшості будинків достатньо повідомити ОСББ. На фасадах пам'яток архітектури й у деяких новобудовах місце під блоки визначене заздалегідь. Майстер підкаже на огляді.</p></details>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= CONTACTS ================= -->
+<div class="view" data-view="contacts" hidden>
+  <div class="wrap page-head">
+    <div class="crumbs"><a href="#home">Головна</a><span>/</span><span>Контакти</span></div>
+    <h1>Зв'язатись з нами</h1>
+  </div>
+  <section>
+    <div class="wrap">
+      <div class="contacts">
+        <div class="c-item"><small>Гаряча лінія</small><b>+38 (067) 000-24-24</b><button class="copy" type="button" data-copy="+380670002424" style="align-self:start">Копіювати</button></div>
+        <div class="c-item"><small>Telegram / Viber</small><b>@smartklima_ua</b><button class="copy" type="button" data-copy="@smartklima_ua" style="align-self:start">Копіювати</button></div>
+        <div class="c-item"><small>Шоурум</small><b style="font-family:var(--body)">Київ, вул. Холодна, 12</b><span class="note">Біля метро «Лук'янівська»</span></div>
+        <div class="c-item"><small>Графік</small><b>Пн–Сб 08:00–20:00</b><span class="note">Нд: лише аварійні виїзди</span></div>
+      </div>
+      <div class="band" style="margin-top:32px">
+        <div><h2>Працюємо по Києву та області</h2><p>Виїзд по місту безкоштовний. За межами Києва 15 ₴/км від Окружної.</p></div>
+        <a class="btn primary" href="#order">Залишити заявку</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= ORDER ================= -->
+<div class="view" data-view="order" hidden>
+  <div class="wrap page-head">
+    <div class="crumbs"><a href="#home">Головна</a><span>/</span><span>Заявка</span></div>
+    <h1>Ваша заявка</h1>
+  </div>
+  <section>
+    <div class="wrap orderpage">
+      <div class="panel">
+        <h3>Що замовляєте</h3>
+        <div id="dItems"></div>
+        <div class="row" id="dTotalRow" style="display:flex;justify-content:space-between;margin-top:12px"><b>Разом</b><b class="num" id="dTotal">0 ₴</b></div>
+        <div class="myorders" id="myOrders" hidden style="margin-top:16px"></div>
+      </div>
+      <div class="panel">
+        <form id="orderForm">
+          <h3>Контакти</h3>
+          <div class="f"><label for="oName">Ім'я</label><input type="text" id="oName" required maxlength="60"></div>
+          <div class="f"><label for="oPhone">Телефон</label><input type="tel" id="oPhone" required placeholder="+380 67 123 45 67" maxlength="20"></div>
+          <div class="f"><label for="oAddr">Адреса</label><input type="text" id="oAddr" maxlength="120" placeholder="Місто, вулиця, поверх"></div>
+          <div class="f"><label for="oDate">Коли зручно</label><input type="text" id="oDate" maxlength="60" placeholder="наприклад, субота зранку"></div>
+          <div class="f"><label for="oMaster">Майстер</label><select id="oMaster"></select></div>
+          <div class="f"><label for="oComment">Коментар</label><textarea id="oComment" rows="2" maxlength="400"></textarea></div>
+          <button class="btn primary" type="submit" id="oSubmit" style="width:100%">Надіслати заявку</button>
+          <p class="note" id="oErr" hidden></p>
+        </form>
+        <div id="dOk" hidden style="display:grid;gap:12px"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ================= ADMIN ================= -->
+<div class="view" data-view="admin" hidden>
+  <div class="wrap page-head">
+    <div class="eyebrow" style="color:var(--heat)">Для персоналу</div>
+    <div class="head" style="margin:0"><h1>Адмінка</h1><span class="sync" id="admSync"></span></div>
+    <p>Заявки з сайту і з мобільного застосунку в одному списку. Зміни бачать і клієнти, і майстри в застосунку.</p>
+  </div>
+  <section>
+    <div class="wrap">
+      <form class="panel" id="admLogin" style="max-width:420px">
+        <h3>Вхід</h3>
+        <div class="f"><label for="admKey">Ключ адміністратора</label><input type="password" id="admKey" autocomplete="current-password" required style="border:1px solid var(--line);background:var(--bg);border-radius:9px;padding:9px 11px;width:100%"></div>
+        <button class="btn primary" type="submit">Увійти</button>
+        <p class="note" id="admErr" hidden></p>
+        <p class="note" id="admDemoHint" hidden>Демо-режим: ключ <b class="num">admin123</b>.</p>
+      </form>
+      <div id="admPanel" hidden>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button class="btn ghost sm" type="button" id="admLogout">Вийти</button></div>
+      <div class="kpis">
+        <div class="kpi"><b id="kNew">0</b><span>нових заявок</span></div>
+        <div class="kpi"><b id="kConf">0</b><span>підтверджених</span></div>
+        <div class="kpi"><b id="kDone">0</b><span>виконаних</span></div>
+        <div class="kpi"><b id="kSum">0 ₴</b><span>виручка з виконаних</span></div>
+      </div>
+      <div class="tabs" id="admTabs">
+        <button class="chip" type="button" data-t="orders" aria-pressed="true">Заявки</button>
+        <button class="chip" type="button" data-t="masters" aria-pressed="false">Графік майстрів</button>
+      </div>
+      <div id="tabOrders">
+        <div class="filters" style="margin-bottom:12px">
+          <select id="admSource" aria-label="Джерело"><option value="">Сайт і застосунок</option><option value="web">Лише сайт</option><option value="mobile">Лише застосунок</option></select>
+          <select id="admFilter" aria-label="Статус">
+            <option value="">Усі статуси</option>
+            <option value="new">Нові</option>
+            <option value="confirmed">Підтверджені</option>
+            <option value="onway">Майстер виїхав</option>
+            <option value="done">Виконані</option>
+            <option value="cancelled">Скасовані</option>
+          </select>
+        </div>
+        <div class="orders" id="admOrders"></div>
+      </div>
+      <div id="tabMasters" hidden>
+        <p class="note" style="margin-top:0">Перемикач змінює статус «Вільний сьогодні» на картках майстрів для всіх відвідувачів.</p>
+        <div style="display:grid;gap:10px;max-width:520px" id="admMasters"></div>
+      </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="fgrid">
+      <div><a class="logo" href="#home" style="padding:0"><i>❄</i>Smart Klima</a><p>Продаж, монтаж і сервіс кондиціонерів у Києві та області з 2014 року.</p></div>
+      <div><h4>Магазин</h4><a href="#catalog">Каталог</a><a href="#compare">Порівняння</a><a href="#calc">Калькулятор</a><a href="#order">Заявка</a></div>
+      <div><h4>Сервіс</h4><a href="#services">Послуги</a><a href="#masters">Майстри</a><a href="#reviews">Відгуки</a><a href="#faq">Питання</a></div>
+      <div><h4>Контакти</h4><a href="#contacts">+38 (067) 000-24-24</a><a href="#contacts">@smartklima_ua</a><a href="../mobile/">Мобільний застосунок</a><a href="#admin">Вхід для персоналу</a></div>
+    </div>
+    <div class="note">© 2026 Smart Klima. Ціни, майстри й телефони на сайті є прикладом, замініть на свої. <span id="modeNote"></span></div>
+  </div>
+</footer>
+<div class="toast" id="toast" hidden></div>
+
+<script src="../shared/seed.js"></script>
+<script src="../shared/config.js"></script>
+<script src="../shared/api.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

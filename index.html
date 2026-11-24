@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Smart Klima</title>
+<link rel="icon" href="mobile/icons/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&family=Manrope:wght@400;600;700&display=swap">
+<style>
+:root{--bg:#eef3f6;--surface:#fff;--ink:#0f2230;--muted:#5a6f7d;--line:#cfdbe3;--accent:#0b7a8a;--heat:#e0662b}
+@media (prefers-color-scheme:dark){:root{--bg:#0c161d;--surface:#132129;--ink:#e4eef3;--muted:#93a8b5;--line:#26404d;--accent:#3cc0cf;--heat:#f08a55;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Manrope,system-ui,sans-serif;min-height:100vh;display:grid;place-items:center;padding:32px max(16px,env(safe-area-inset-left,0px))}
+main{max-width:760px;width:100%;display:grid;gap:24px}
+h1{font-family:Unbounded,Manrope,sans-serif;font-size:clamp(1.8rem,5vw,2.6rem);margin:0}
+p{color:var(--muted);margin:0;max-width:60ch}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+a.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;text-decoration:none;color:var(--ink);display:grid;gap:8px}
+a.card:hover{border-color:var(--accent)}
+a.card b{font-family:Unbounded,Manrope,sans-serif;font-size:1.15rem}
+a.card span{color:var(--muted);font-size:.92rem}
+a.card i{font-style:normal;color:var(--accent);font-weight:700}
+.db{border:1px dashed var(--line);border-radius:18px;padding:16px;text-align:center;color:var(--muted);font-size:.9rem}
+.db b{color:var(--heat)}
+@media (max-width:560px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+  <div>
+    <h1>Smart Klima</h1>
+    <p>Продаж, монтаж і сервіс кондиціонерів. Дві системи на одній базі даних: сайт для клієнтів і офісу та мобільний застосунок для клієнтів і майстрів.</p>
+  </div>
+  <div class="grid">
+    <a class="card" href="web/"><b>Веб-сайт</b><span>Каталог, сторінки моделей, порівняння, калькулятор монтажу, майстри, відгуки, заявка й адмінка.</span><i>Відкрити →</i></a>
+    <a class="card" href="mobile/"><b>Мобільний застосунок</b><span>Клієнт: каталог, підбір, заявка, статус. Майстер: вхід за PIN, взяти заявку, змінити статус.</span><i>Відкрити →</i></a>
+  </div>
+  <div class="db">Обидва клієнти працюють з <b>однією базою</b>: заявка з сайту одразу з'являється в майстра в застосунку, а статус від майстра бачить клієнт і адміністратор.</div>
+</main>
+</body>
+</html>
